@@ -3,13 +3,14 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const MONGO_URL =
-  process.env.MONGO_URL || "mongodb://localhost:27017/UnityBackend";
+const MONGO_URI = process.env.MONGO_URI;
 
 const connectDB = async () => {
   try {
-    await mongoose.connect(MONGO_URL);
-    console.log("Connected to MongoDB");
+    await mongoose
+      .connect(MONGO_URI)
+      .then(() => console.log("Connected to MongoDB Atlas"))
+      .catch((error) => console.error("MongoDB connection error:", error));
   } catch (error) {
     console.error("MongoDB connection error:", error);
     process.exit(1); // Exit with failure
