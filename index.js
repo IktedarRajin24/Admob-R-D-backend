@@ -13,6 +13,9 @@ app.use(bodyParser.json());
 const PORT = process.env.PORT;
 
 connectDB();
+app.use("/", (req, res) => {
+  res.send("<h1>Hello from backend</h1>");
+});
 
 app.use("/api", userRoutes);
 app.use("/api", leaderboardRoutes);
