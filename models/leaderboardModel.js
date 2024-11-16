@@ -10,4 +10,4 @@ const LeaderBoardSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-export default mongoose.model("Leaderboard", LeaderBoardSchema, "Leaderboard");
+export default mongoose.model("Leaderboard", LeaderBoardSchema);
