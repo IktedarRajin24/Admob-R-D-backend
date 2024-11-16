@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 
 export const getLeaderboard = async (req, res) => {
   try {
-    const leaderboard = await leaderboardModel.find().sort({ level: -1 });
+    const leaderboard = await leaderboardModel.find();
     res.status(200).json(leaderboard);
   } catch (error) {
     res.status(500).json({ error: "Failed to retrieve data" });
