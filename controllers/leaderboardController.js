@@ -22,18 +22,18 @@ export const getOneScore = async (req, res) => {
 };
 
 export const updateLeaderboard = async (req, res) => {
-  const { username } = req.params;
+  const { email } = req.params;
   const { level, timeLeft } = req.body;
 
   try {
     const updatedLeaderboard = await leaderboardModel.findOneAndUpdate(
-      { username: username },
+      { email: email },
       { level, timeLeft },
       { new: true }
     );
 
     if (!updatedLeaderboard) {
-      console.error("User not found:", username);
+      console.error("User not found:", email);
       return res.status(404).json({ message: "User not found on leaderboard" });
     }
 
