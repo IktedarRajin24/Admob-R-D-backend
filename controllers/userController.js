@@ -1,4 +1,5 @@
 import userModel from "../models/userModel.js";
+import leaderboardModel from "../models/leaderboardModel.js";
 import jwt from "jsonwebtoken";
 
 export const signup = async (req, res) => {
@@ -14,6 +15,13 @@ export const signup = async (req, res) => {
 
     const newUser = new userModel({ username, email, password, country });
     await newUser.save();
+    const newLeaderboardEntry = new leaderboardModel({
+      username,
+      level: 0,
+      timeLeft: 0,
+      country,
+    });
+    await newLeaderboardEntry.save();
     res.status(201).json({ message: "User registered successfully" });
   } catch (error) {
     console.error("Error during signup:", error);
