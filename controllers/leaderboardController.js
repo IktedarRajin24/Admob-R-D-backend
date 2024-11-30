@@ -23,19 +23,24 @@ export const getOneScore = async (req, res) => {
 
 export const updateLeaderboard = async (req, res) => {
   const { username } = req.params;
-  const { level, timeLeft } = req.body;
+  const { timeLeft } = req.body; // Only updating timeLeft explicitly
+  const incrementLevel = 1; // Increment level by 1
 
   try {
-    const updatedLeaderboard = await leaderboardModel.findOneAndUpdate(
-      { username: username },
-      { level, timeLeft },
-      { new: true }
-    );
+    // Find the user by username
+    const user = await leaderboardModel.findOne({ username });
 
-    if (!updatedLeaderboard) {
+    if (!user) {
       console.error("User not found:", username);
       return res.status(404).json({ message: "User not found on leaderboard" });
     }
+
+    user.level += incrementLevel; 
+    if (timeLeft !== undefined) {
+      user.timeLeft = timeLeft;
+    }
+
+    const updatedLeaderboard = await user.save();
 
     res.status(200).json(updatedLeaderboard);
   } catch (error) {
@@ -43,3 +48,4 @@ export const updateLeaderboard = async (req, res) => {
     res.status(500).json({ error: "Failed to update data" });
   }
 };
+
