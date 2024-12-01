@@ -36,7 +36,7 @@ export const updateLeaderboard = async (req, res) => {
     }
 
     user.level += incrementLevel; 
-    if (timeLeft !== undefined) {
+    if (typeof timeLeft == "number") {
       user.timeLeft += timeLeft;
     }
 
