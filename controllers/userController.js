@@ -9,12 +9,15 @@ export const signup = async (req, res) => {
       $or: [{ username }, { email }],
     });
     if (existingUser)
-      return res
-        .status(400)
-        .json({ message: "Username or email already exists" });
+      return res.status(400).json({
+        message: "Username or email already exists",
+        errorCode: "USER_EXISTS",
+      });
 
+    // Create a new user
     const newUser = new userModel({ username, email, password, country });
     await newUser.save();
+
     const newLeaderboardEntry = new leaderboardModel({
       username,
       level: 0,
@@ -22,10 +25,15 @@ export const signup = async (req, res) => {
       country,
     });
     await newLeaderboardEntry.save();
+
     res.status(201).json({ message: "User registered successfully" });
   } catch (error) {
     console.error("Error during signup:", error);
-    res.status(500).json({ message: "Error during signup", error });
+    res.status(500).json({
+      message: "Error during signup",
+      error: error.message,
+      errorCode: "SIGNUP_ERROR",
+    });
   }
 };
 
@@ -34,10 +42,13 @@ export const login = async (req, res) => {
   try {
     const user = await userModel.findOne({ username, password });
     if (!user) {
-      return res.status(400).json({ message: "Invalid email or password" });
+      return res.status(400).json({
+        message: "Invalid username or password",
+        errorCode: "INVALID_CREDENTIALS",
+      });
     }
 
-    // Generate JWT token
+    // Generate a JWT token for the user
     const token = jwt.sign(
       { userId: user._id, email: user.email },
       process.env.JWT_SECRET,
@@ -47,7 +58,11 @@ export const login = async (req, res) => {
     res.status(200).json({ message: "Login successful", token });
   } catch (error) {
     console.error("Error during login:", error);
-    res.status(500).json({ message: "Error during login", error });
+    res.status(500).json({
+      message: "Error during login",
+      error: error.message,
+      errorCode: "LOGIN_ERROR",
+    });
   }
 };
 
@@ -57,6 +72,10 @@ export const getAllUsers = async (req, res) => {
     res.json(users);
   } catch (error) {
     console.error("Error fetching users:", error);
-    res.status(500).json({ message: "Error fetching users", error });
+    res.status(500).json({
+      message: "Error fetching users",
+      error: error.message,
+      errorCode: "FETCH_USERS_ERROR",
+    });
   }
 };
