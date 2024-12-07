@@ -1,7 +1,7 @@
 import userModel from "../models/userModel.js";
 import leaderboardModel from "../models/leaderboardModel.js";
 import jwt from "jsonwebtoken";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 
 export const signup = async (req, res) => {
   const { username, email, password, country } = req.body;
@@ -82,5 +82,3 @@ export const login = async (req, res) => {
     });
   }
 };
-
-
